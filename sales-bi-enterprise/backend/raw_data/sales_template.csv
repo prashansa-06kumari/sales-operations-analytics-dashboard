@@ -1,0 +1,4 @@
+order_date,ship_date,quantity,revenue,profit,product_name,category,region_name,customer_name
+2026-01-01,2026-01-03,2,500,150,Gaming Laptop,Electronics,North America,TechCorp
+2026-01-02,2026-01-05,1,1200,400,Office Desk,Furniture,Europe,Global Solutions
+2026-01-05,2026-01-06,5,50,20,Ballpoint Pens,Office Supplies,Asia Pacific,Education Inc
