@@ -15,32 +15,15 @@ app.use(cors());
 app.use(morgan('dev'));
 app.use(express.json());
 
-// Auth Routes
-app.post('/api/auth/signup', (req, res) => {
-  const { email, password, full_name } = req.body;
-  db.run(`INSERT INTO users (email, password, full_name) VALUES (?, ?, ?)`, [email, password, full_name], function(err) {
-    if (err) {
-      if (err.message.includes('UNIQUE')) {
-        return res.status(400).json({ detail: "Email already exists" });
-      }
-      return res.status(500).json({ detail: err.message });
-    }
-    res.json({ message: "User created successfully", userId: this.lastID });
-  });
-});
-
-app.post('/api/auth/login', (req, res) => {
-  const { email, password } = req.body;
-  db.get(`SELECT id, email, full_name, role FROM users WHERE email = ? AND password = ?`, [email, password], (err, user) => {
-    if (err) return res.status(500).json({ detail: err.message });
-    if (!user) return res.status(401).json({ detail: "Invalid email or password" });
-    res.json({ message: "Login successful", user });
-  });
-});
-
 // Database Setup
 const dbPath = path.resolve(__dirname, 'sales_bi.db');
-const db = new sqlite3.Database(dbPath);
+const db = new sqlite3.Database(dbPath, (err) => {
+  if (err) {
+    console.error('Database connection error:', err.message);
+  } else {
+    console.log('Connected to the SQLite database.');
+  }
+});
 
 db.serialize(() => {
   db.run(`CREATE TABLE IF NOT EXISTS users (
@@ -49,7 +32,9 @@ db.serialize(() => {
     password TEXT,
     full_name TEXT,
     role TEXT DEFAULT 'viewer'
-  )`);
+  )`, (err) => {
+    if (err) console.error('Error creating users table:', err.message);
+  });
 
   db.run(`CREATE TABLE IF NOT EXISTS regions (
     id INTEGER PRIMARY KEY AUTOINCREMENT,
@@ -84,6 +69,43 @@ db.serialize(() => {
     FOREIGN KEY(product_id) REFERENCES products(id),
     FOREIGN KEY(customer_id) REFERENCES customers(id)
   )`);
+});
+
+// Auth Routes
+app.post('/api/auth/signup', (req, res) => {
+  const { email, password, full_name } = req.body;
+  console.log('Signup attempt for:', email);
+  
+  if (!email || !password || !full_name) {
+    return res.status(400).json({ detail: "Missing required fields" });
+  }
+
+  db.run(`INSERT INTO users (email, password, full_name) VALUES (?, ?, ?)`, [email, password, full_name], function(err) {
+    if (err) {
+      console.error('Signup error:', err.message);
+      if (err.message.includes('UNIQUE')) {
+        return res.status(400).json({ detail: "Email already exists" });
+      }
+      return res.status(500).json({ detail: err.message });
+    }
+    console.log('User created successfully:', email);
+    res.json({ message: "User created successfully", userId: this.lastID });
+  });
+});
+
+app.post('/api/auth/login', (req, res) => {
+  const { email, password } = req.body;
+  console.log('Login attempt for:', email);
+
+  db.get(`SELECT id, email, full_name, role FROM users WHERE email = ? AND password = ?`, [email, password], (err, user) => {
+    if (err) {
+      console.error('Login error:', err.message);
+      return res.status(500).json({ detail: err.message });
+    }
+    if (!user) return res.status(401).json({ detail: "Invalid email or password" });
+    console.log('Login successful:', email);
+    res.json({ message: "Login successful", user });
+  });
 });
 
 // Multer Setup
