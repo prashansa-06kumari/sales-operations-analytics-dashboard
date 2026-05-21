@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { Download, FileText, Filter, Search, Loader2 } from 'lucide-react';
 import { getReportsData } from '../services/analyticsService';
 import { motion } from 'framer-motion';
+import { exportToCSV } from '../utils/exportUtils';
 
 const Reports = () => {
   const [loading, setLoading] = useState(true);
@@ -24,17 +25,7 @@ const Reports = () => {
 
   const handleDownload = () => {
     if (data.length === 0) return;
-    
-    const headers = Object.keys(data[0]).join(',');
-    const rows = data.map(row => Object.values(row).join(',')).join('\n');
-    const csvContent = `data:text/csv;charset=utf-8,${headers}\n${rows}`;
-    const encodedUri = encodeURI(csvContent);
-    const link = document.createElement("a");
-    link.setAttribute("href", encodedUri);
-    link.setAttribute("download", "sales_report.csv");
-    document.body.appendChild(link);
-    link.click();
-    document.body.removeChild(link);
+    exportToCSV(data, 'full_sales_report.csv');
   };
 
   const filteredData = data.filter(item => 

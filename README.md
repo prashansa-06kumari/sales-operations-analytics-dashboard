@@ -75,6 +75,38 @@ sales_bi/
 3. View your business metrics on the **Dashboard** and **Analytics** pages.
 4. Explore **AI Insights** for data-driven recommendations.
 
+## 🚀 Deployment Guide
+
+### Docker Deployment (Recommended)
+The easiest way to run the entire stack in production is using Docker Compose.
+
+1. **Build and Start**:
+   ```bash
+   docker-compose up --build -d
+   ```
+2. **Access**:
+   - Frontend: `http://localhost:5173`
+   - Backend API: `http://localhost:8000`
+
+### Frontend Deployment (Vercel / Netlify)
+1. **Prepare Environment**: Update `frontend/src/services/api.js` to point to your production backend URL.
+2. **Build**: 
+   ```bash
+   cd frontend
+   npm run build
+   ```
+3. **Deploy**: Upload the `dist` folder to your static hosting provider (Vercel, Netlify, etc.).
+
+### Backend Deployment (Render / Railway / DigitalOcean)
+1. **Choose Engine**: The project supports both Node.js (`server.js`) and Python (`app/main.py`).
+2. **Node.js Deployment**:
+   - Ensure `package.json` has a start script: `"start": "node server.js"`.
+   - Set up your environment variables (e.g., `PORT`).
+   - Deploy to a platform that supports Node.js.
+3. **Database**: 
+   - The current setup uses SQLite (`sales_bi.db`). 
+   - For persistent storage on platforms like Render, use a **Persistent Disk** or migrate to a managed database like **PostgreSQL**.
+
 ## 📄 License
 
 This project is licensed under the ISC License.

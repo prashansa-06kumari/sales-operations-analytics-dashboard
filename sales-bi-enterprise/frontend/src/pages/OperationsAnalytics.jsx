@@ -29,14 +29,6 @@ const OperationsAnalytics = () => {
     fetchData();
   }, []);
 
-  const deliveryData = [
-    { day: 'Mon', onTime: 95, delayed: 5 },
-    { day: 'Tue', onTime: 92, delayed: 8 },
-    { day: 'Wed', onTime: 98, delayed: 2 },
-    { day: 'Thu', onTime: 91, delayed: 9 },
-    { day: 'Fri', onTime: 95, delayed: 5 },
-  ];
-
   if (loading) {
     return (
       <div className="flex flex-col items-center justify-center h-[60vh] space-y-4">

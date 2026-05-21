@@ -9,10 +9,8 @@ import UploadDataset from './pages/UploadDataset';
 import Reports from './pages/Reports';
 import Login from './pages/Login';
 import Signup from './pages/Signup';
-
-// Placeholder components for remaining pages
-const Forecasting = () => <div className="p-8"><h2 className="text-2xl font-bold">Forecasting & Predictions</h2><p className="mt-4 text-slate-500">Coming soon: Machine learning models for sales prediction.</p></div>;
-const Settings = () => <div className="p-8"><h2 className="text-2xl font-bold">Platform Settings</h2><p className="mt-4 text-slate-500">Configure your dashboard preferences and data sources.</p></div>;
+import Settings from './pages/Settings';
+import Forecasting from './pages/Forecasting';
 
 function App() {
   return (
