@@ -30,7 +30,11 @@ const Signup = () => {
       await api.post('/auth/signup', formData);
       navigate('/login');
     } catch (err) {
-      setError(err.response?.data?.detail || 'Failed to create account');
+      if (!err.response) {
+        setError('Cannot reach the server. Start the backend: cd sales-bi-enterprise/backend && npm start');
+      } else {
+        setError(err.response?.data?.detail || 'Failed to create account');
+      }
     } finally {
       setLoading(false);
     }

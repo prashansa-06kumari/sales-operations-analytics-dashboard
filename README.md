@@ -89,7 +89,10 @@ The easiest way to run the entire stack in production is using Docker Compose.
    - Backend API: `http://localhost:8000`
 
 ### Frontend Deployment (Vercel / Netlify)
-1. **Prepare Environment**: Update `frontend/src/services/api.js` to point to your production backend URL.
+1. **Environment variable** (Vercel → Project → Settings → Environment Variables):
+   - `VITE_API_URL` = `https://your-backend.onrender.com` (no trailing slash; `/api` is appended automatically)
+   - Example: `VITE_API_URL=https://sales-operations-analytics-dashboard.onrender.com`
+2. **Prepare Environment**: The frontend resolves `VITE_API_URL` to `{url}/api` so requests hit `/api/auth/*`, `/api/analytics/*`, etc.
 2. **Build**: 
    ```bash
    cd frontend
